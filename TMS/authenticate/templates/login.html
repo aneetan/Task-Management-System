@@ -1,0 +1,62 @@
+ <!doctype html>
+<html lang="en">
+ {%load static %}
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'authenticate/css/bootstrap.min.css' %}">
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="{% static 'authenticate/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'authenticate/css/uf-style.css' %} ">
+    <title>Login </title>
+  </head>
+  <body>
+    <div class="uf-form-signin">
+      <div class="text-center">
+      <h1 class="text-white h3">Account Login</h1>
+      </div>
+      <form class="mt-4">
+        {% csrf_token %}
+        <div class="input-group uf-input-group input-group-lg mb-3">
+          <input type="text" class="form-control" placeholder="Username or Email address">
+        </div>
+        <div class="input-group uf-input-group input-group-lg mb-3">
+          <input type="password" class="form-control" placeholder="Password">
+        </div>
+        <div class="d-flex mb-3 justify-content-between">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input uf-form-check-input" id="exampleCheck1">
+            <label class="form-check-label text-white" for="exampleCheck1">Remember Me</label>
+          </div>
+          <a href="#">Forgot password?</a>
+        </div>
+        <div class="d-grid mb-4">
+          <button type="submit" class="btn uf-btn-primary btn-lg">Login</button>
+        </div>
+        <div class="d-flex mb-3">
+            <div class="dropdown-divider m-auto w-25"></div>
+            <small class="text-nowrap text-white">Or login with</small>
+            <div class="dropdown-divider m-auto w-25"></div>
+        </div>
+        <div class="uf-social-login d-flex justify-content-center">
+          <a href="#" class="uf-social-ic" title="Login with Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="uf-social-ic" title="Login with Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="uf-social-ic" title="Login with Google"><i class="fab fa-google"></i></a>
+        </div>
+        <div class="mt-4 text-center">
+          <span class="text-white">Don't have an account?</span>
+          <a href="{% url 'signup' %}">Sign Up</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- JavaScript -->
+
+    <!-- Separate Popper and Bootstrap JS -->
+    <script src="{% static 'authenticate/js/popper.min.js' %}"></script>
+    <script src="{% static 'authenticate/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

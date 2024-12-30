@@ -1,32 +1,18 @@
-/*!
-
- =========================================================
- * Login Form Bootstrap 1
- =========================================================
-
- * Product Page: https://uifresh.net
- * Copyright 2021 UIFresh (https://uifresh.net)
- * Coded by UIFresh
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
- */
+ 
 html, body{
 	height: 100%;
 }
 body{
 	display: flex;
 	align-items: center;
-	background-image: linear-gradient( to right, #f12711, #f5af19);
+	background-image: linear-gradient( to right, #71a3d2, #bccad6);
 }
 a{
-	color: #842029;
+	color: #1b76d2;
 	text-decoration: none;
 }
 a:hover{
-	color: #5a1118;
+	color: #2424d5;
 }
 .uf-form-signin {
     width: 100%;
@@ -55,18 +41,18 @@ a:hover{
     background: #ffffff;
 }
 .uf-btn-primary {
-    background: #842029;
+    background: #136fc6;
     color: #fff;
 }
 
 .uf-btn-primary:hover {
-    background: #5a1118;
+    background: #136fc6;
     color: #fff;
 }
 
 .uf-form-check-input:checked {
-    background-color: #842029;
-    border-color: #842029;
+    background-color: #136fc6;
+    border-color: #136fc6;
 }
 
 .uf-social-login .uf-social-ic+.uf-social-ic{
@@ -82,7 +68,7 @@ a:hover{
 	align-items: center;
 }
 .uf-social-ic:hover{
-	background: #842029;
+	background: #136fc6;
 }
 .uf-social-ic:hover i{
 	color: #fff;
