@@ -18,22 +18,19 @@
       <div class="text-center">
       <h1 class="text-white h3">Account Register</h1>
       </div>
-      <form class="mt-4">
+      <form class="mt-4" method="POST" action="{% url 'process_signup' %}">
         {% csrf_token %}
         <div class="input-group uf-input-group input-group-lg mb-3">
-          <input type="text" class="form-control" placeholder="Your name">
+          <input type="text" class="form-control" name="name" placeholder="Your name">
         </div>
         <div class="input-group uf-input-group input-group-lg mb-3">
-          <input type="email" class="form-control" placeholder="Email address">
+          <input type="email" class="form-control" name="email" placeholder="Email address">
         </div>
         <div class="input-group uf-input-group input-group-lg mb-3">
-          <input type="text" class="form-control" placeholder="Your phone">
+          <input type="text" class="form-control" name="phone" placeholder="Your phone">
         </div>
         <div class="input-group uf-input-group input-group-lg mb-3">
-          <input type="password" class="form-control" placeholder="Password">
-        </div>
-        <div class="input-group uf-input-group input-group-lg mb-3">
-          <input type="image" >
+          <input type="password" class="form-control" name="password" placeholder="Password">
         </div>
 
         <div class="d-grid mb-4">
