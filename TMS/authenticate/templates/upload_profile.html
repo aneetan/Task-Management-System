@@ -19,8 +19,9 @@
       <label for="file-path">
         <span class="material-symbols-rounded">photo_camera</span>
       </label>
-      <form action="">
-      <input type="file" accept="image/jpeg, image/png, image/jpg" id="file-path" class="user-file">
+      <form action="{% url 'user_profile_upload' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+      <input type="file" name="photo" accept="image/jpeg, image/png, image/jpg" id="file-path" class="user-file">
       <input class="continue" type="submit" value="Continue">
       <a class="skip-link" href=""> Skip </a>
       </form>

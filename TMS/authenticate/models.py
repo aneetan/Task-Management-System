@@ -12,4 +12,10 @@ class GeneralUser(models.Model):
     def __str__(self):
         return self.name
 
+class UserProfile(models.Model):
+    profileId = models.AutoField(primary_key=True)
+    # userId = models.ForeignKey('GeneralUser', on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to='profile_pic/')
 
+    def __str__(self):
+        return f"{self.userId.name}'s Profile"
