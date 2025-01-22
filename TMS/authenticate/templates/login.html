@@ -18,13 +18,13 @@
       <div class="text-center">
       <h1 class="text-white h3">Account Login</h1>
       </div>
-      <form class="mt-4">
+      <form class="mt-4" action="{% url 'process_login' %}" method="POST">
         {% csrf_token %}
         <div class="input-group uf-input-group input-group-lg mb-3">
-          <input type="text" class="form-control" placeholder="Username or Email address">
+          <input type="text" class="form-control" name="email" placeholder="Username or Email address">
         </div>
         <div class="input-group uf-input-group input-group-lg mb-3">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" class="form-control"  name="password" placeholder="Password">
         </div>
         <div class="d-flex mb-3 justify-content-between">
           <div class="form-check">
@@ -42,8 +42,6 @@
             <div class="dropdown-divider m-auto w-25"></div>
         </div>
         <div class="uf-social-login d-flex justify-content-center">
-          <a href="#" class="uf-social-ic" title="Login with Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="uf-social-ic" title="Login with Twitter"><i class="fab fa-twitter"></i></a>
           <a href="#" class="uf-social-ic" title="Login with Google"><i class="fab fa-google"></i></a>
         </div>
         <div class="mt-4 text-center">
