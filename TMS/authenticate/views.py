@@ -23,6 +23,9 @@ def process_signup(request):
         generalUser = GeneralUser(name=name, email=email, phone=phone, password=make_password(password))
         generalUser.save()
 
+        user = GeneralUser.objects.get(email=email)
+        request.session['id'] = user.id
+
         return render(request, 'upload_profile.html')
     else:
         return render(request, 'signup.html')
@@ -48,7 +51,8 @@ def user_profile_upload(request):
         form = UserProfileForm(request.POST, request.FILES)
         if form.is_valid():
             user_profile = form.save(commit=False)
-            # user_profile.userId = request.user
+            id = request.session['id']                              #retrieve id from session
+            user_profile.userId = GeneralUser.objects.get(id=id)    #retrive user from id
             
             user_profile.save()
 
