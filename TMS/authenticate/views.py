@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import GeneralUser
+from .models import GeneralUser, UserProfileImage
 from .forms import UserProfileForm
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -36,15 +36,14 @@ def process_login(request):
         password = request.POST.get('password')
 
         user = GeneralUser.objects.get(email=email)
-        if (check_password(password, user.password)):
-            request.session['email'] = user.email
+        profile = UserProfileImage.objects.get(userId=user.id)
+        
+        if check_password(password, user.password):
             request.session['id'] = user.id
-
-
-            return render(request, 'index.html', {user:user})
+            return render(request, 'index.html', {'user': user, 'profile': profile})
         
         else:
-            return render(request, 'login.html')
+            return render(request, 'login.html', {'error': 'Invalid email or password'})
 
 def user_profile_upload(request):
     if request.method == 'POST' and request.FILES['photo']:
@@ -59,6 +58,7 @@ def user_profile_upload(request):
             return render(request, 'index.html')
     else:
         return render(request, 'user_profile.html')
+
 
 
 
