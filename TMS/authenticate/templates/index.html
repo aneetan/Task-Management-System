@@ -100,11 +100,12 @@
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
-                  <img src="assets/images/faces/face1.jpg" alt="image">
+                  <img src="{% if profile and profile.photo %}{% static 'authenticate/media/' %}{{ profile.photo }}{% else %}{% static 'authenticate/images/default.png' %}{% endif %}" alt="Profile Picture">
+
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">David Greymaax</p>
+                  <p class="mb-1 text-black"> {{user.name}} </p>
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -134,7 +135,6 @@
               <a class="nav-link" href="jobRequest.html">
                 <span class="menu-title"> Projects </span>
                 <i class="mdi mdi-star menu-icon"></i>
-
               </a>
             </li>
 
