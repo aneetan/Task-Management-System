@@ -1,18 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load static %}
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'authenticate/css/upload_profile.css' %}">
-  <title>Profile Section </title>
-</head>
-<body>
-  <h2> login successful </h2>
+  {% load static %}
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Add Project</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'authenticate/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'authenticate/css/style.css' %}">
+    <!-- End layout styles -->
+
+    <style>
+        .btn-primary{
+            background: #5271FF !important;
+        }
+
+         
+     .navbar .navbar-brand-wrapper .navbar-brand img{
+      height: 70px;
+      width: 180px;
+     }
+
+     .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini img{
+      width: 40px;
+      height: 40px;
+     }
+
+     .page-title .page-title-icon{
+      background: #5271FF !important;
+     }
+
      
-</body>
+     .sidebar .nav .nav-item.active > .nav-link .menu-title,
+     .sidebar .nav .nav-item.active > .nav-link i{
+      color: #5271FF;
+     }
+
+     input,
+     textarea,
+     select{
+      border: 1px solid #dfdfdf !important;
+      transition: border-color 0.3s;
+
+     }
+
+     input:focus,
+     textarea:focus,
+     select:focus{
+      border-color: #5271FF !important;
+     }
+
+     input::placeholder,
+     textarea::placeholder,
+     select::placeholder{
+      color: #c5b8b8 !important;
+     }
+
+     .jobsubmit-btn{
+      transition: transform 0.3s;
+      border-radius: 8px;
+     }
+
+     .jobsubmit-btn:hover{
+      transform: scale(1.04);
+
+     }
+
+
+   
+    </style>
+  </head>
+  <body>
+    <div class="container-scroller">
+      
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo" href="index.html"><img src="{% static 'authenticate/images/protask_logo.png' %}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{% static 'authenticate/images/protask_logo_small.png' %}" alt="logo" /></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+          <div class="search-field d-none d-md-block">
+            <form class="d-flex align-items-center h-100" action="#">
+              <div class="input-group">
+                <div class="input-group-prepend bg-transparent">
+                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                </div>
+                <input type="text" class="form-control bg-transparent border-0" placeholder="Search jobs ">
+              </div>
+            </form>
+          </div>
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item nav-profile dropdown">
+              <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="nav-profile-img">
+                  <img src="assets/images/faces/face1.jpg" alt="image">
+                  <span class="availability-status online"></span>
+                </div>
+                <div class="nav-profile-text">
+                  <p class="mb-1 text-black">David Greymaax</p>
+                </div>
+              </a>
+              <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="mdi mdi-cached me-2 text-success"></i> See profile </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">
+                  <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+              </div>
+            </li>
+            
+            
+          
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+          
+            <li class="nav-item ">
+              <a class="nav-link" href="jobRequest.html">
+                <span class="menu-title"> Projects </span>
+                <i class="mdi mdi-star menu-icon"></i>
+
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="viewJob.html">
+                <span class="menu-title"> Admin</span>
+                <i class="mdi mdi-briefcase menu-icon"></i>
+
+
+              </a>
+            </li>
+            
+           
+            <li class="nav-item active">
+              <a class="nav-link" href="addJob.html">
+                <span class="menu-title"> Add New Project</span>
+                <i class="mdi mdi-plus menu-icon"></i>
+
+              </a>
+            </li>
+           
+          </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title" style="color: #5271FF;">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+
+                </span> Add job Details
+              </h3>
+            </div>
+            <div class="row">
+              
+              
+               
+            </div>
+        
+            <div class="row">
+
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Add job details</h4>
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        <label for="exampleInputName1">Title</label>
+                        <input type="text" class="form-control" id="title" placeholder="Eg: Backend Developer">
+                      </div>
+                       
+                      <div class="form-group">
+                       
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label for="exampleSelectLocation"> Location Type: </label>
+                            
+                            <div class="col-sm-9">
+                              <select class="form-control" id="exampleSelectLocation" name="locationType" > 
+                                <option disabled selected> Please select -----------------------   </option>
+                              <option>On-site</option>
+                              <option>Hybrid</option>
+                              <option>Remote</option>
+                              
+                            </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                        <label for="exampleSelectEmp"> Employment Type: </label>
+
+                            
+                            <div class="col-sm-9">
+                              <select class="form-control" id="exampleSelectEmp" name="empType">
+                                <option disabled selected> Please select -----------------------</option>
+                              <option>Full-Time</option>
+                              <option>Part-Time</option>
+                              <option>Freelance</option>
+                              <option>Internship</option>
+                              <option>Apprenticeship</option>
+                            </select>
+                            </div>
+                          </div>
+                        </div>
+                        
+                      </div>
+
+                      <div class="form-group">
+                        <label for="exampleTextarea1">Job Description</label>
+                        <textarea class="form-control" id="exampleTextarea2" rows="1" placeholder="Add short job description"></textarea>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="exampleTextarea1">Qualification</label>
+                        <textarea class="form-control" id="exampleTextarea2" rows="4" placeholder="Add required qualification"></textarea>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="exampleTextarea1">Required Skills</label>
+                        <textarea class="form-control" id="exampleTextarea1" rows="2" placeholder="Add required skills for job"></textarea>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="exampleInputName1">Expected Salary</label>
+                        <input type="text" class="form-control" id="title" placeholder="Eg: Negotiable">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="exampleTextarea1"> Key Responsibilties</label>
+                        <textarea class="form-control" id="exampleTextarea1" rows="4" placeholder="Describe Key Responsibilties for the title"></textarea>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="exampleTextarea1">Qualification</label>
+                        <textarea class="form-control" id="exampleTextarea2" rows="4" placeholder="Add required qualification"></textarea>
+                      </div>
+
+                      <button type="submit" class="btn jobsubmit-btn btn-primary me-2"> Add job </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+             
+            
+          </div>
+          
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+              <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Protask - User Panel</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'authenticate/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'authenticate/js/jquery.cookie.js' %}" type="text/javascript"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'authenticate/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'authenticate/js/misc.js' %}"></script>
+    <!-- endinject -->
+  </body>
 </html>
