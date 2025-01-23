@@ -36,15 +36,15 @@ def process_login(request):
         password = request.POST.get('password')
 
         user = GeneralUser.objects.get(email=email)
-        if (check_password(password, user.password)):
-            request.session['email'] = user.email
+        print(user)
+        print(user.password)
+        print(check_password(password, user.password))
+        if check_password(password, user.password):
             request.session['id'] = user.id
-
-
-            return render(request, 'index.html', {user:user})
+            return render(request, 'index.html', {'user': user})
         
         else:
-            return render(request, 'login.html')
+            return render(request, 'login.html', {'error': 'Invalid email or password'})
 
 def user_profile_upload(request):
     if request.method == 'POST' and request.FILES['photo']:
