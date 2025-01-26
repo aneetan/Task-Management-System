@@ -100,7 +100,7 @@
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
-                  <img src="{% if profile and profile.photo %}{% static 'authenticate/media/' %}{{ profile.photo }}{% else %}{% static 'authenticate/images/default.png' %}{% endif %}" alt="Profile Picture">
+                  <img src="{% if profile %}{{ profile }}{% else %}{% static 'authenticate/images/default.png' %}{% endif %}" alt="Profile Picture">
 
                   <span class="availability-status online"></span>
                 </div>

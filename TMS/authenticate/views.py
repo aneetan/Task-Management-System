@@ -1,9 +1,20 @@
 from django.shortcuts import render
 from .models import GeneralUser, UserProfileImage
 from .forms import UserProfileForm
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth import login, authenticate
 
 # Create your views here.
+def user_profile(userId):
+    user = GeneralUser.objects.get(id = userId)
+    profile = user.profile_pic
+
+    if profile:
+        profile_image_url = profile.photo
+    else:
+        profile_image_url = None
+    
+    return profile_image_url
+
 def signup(request):
     return render(request, 'signup.html')
 
@@ -15,12 +26,13 @@ def upload_profile(request):
 
 def process_signup(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        password = request.POST.get('password')
+        name = request.POST['name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        password = request.POST['password']
 
-        generalUser = GeneralUser(name=name, email=email, phone=phone, password=make_password(password))
+        generalUser = GeneralUser(username=name, email=email, phone=phone)
+        generalUser.set_password(password)
         generalUser.save()
 
         user = GeneralUser.objects.get(email=email)
@@ -35,10 +47,12 @@ def process_login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = GeneralUser.objects.get(email=email)
-        profile = UserProfileImage.objects.get(userId=user.id)
+        user1 = GeneralUser.objects.get(email=email)
+        profile = user_profile(user1.id)
+
+        user = authenticate(request, username = email, password=password)
         
-        if check_password(password, user.password):
+        if user is not None:
             request.session['id'] = user.id
             return render(request, 'index.html', {'user': user, 'profile': profile})
         
@@ -55,7 +69,7 @@ def user_profile_upload(request):
             
             user_profile.save()
 
-            return render(request, 'index.html')
+            return render(request, 'login.html')
     else:
         return render(request, 'user_profile.html')
 
