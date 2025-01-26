@@ -21,11 +21,15 @@ class GeneralUser(AbstractUser):
 
 class UserProfileImage(models.Model):
     profileId = models.AutoField(primary_key=True)
-    userId = models.ForeignKey(GeneralUser, on_delete=models.CASCADE)
+    userId = models.OneToOneField(
+        GeneralUser,
+        on_delete=models.CASCADE,
+        related_name='profile_image'
+    )
     photo = models.ImageField(upload_to='profile_pic/')
 
     def __str__(self):
-        return f"{self.userId.name}'s Profile"
+        return f"{self.userId.username}'s Profile"
 
 # class Project(models.Model):
 #     projectId = models.AutoField(primary_key=True)

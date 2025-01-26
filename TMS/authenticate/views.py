@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import GeneralUser, UserProfileImage
+from .models import GeneralUser
 from .forms import UserProfileForm
 from django.contrib.auth import login, authenticate
 
@@ -7,12 +7,14 @@ from django.contrib.auth import login, authenticate
 def user_profile(userId):
     user = GeneralUser.objects.get(id = userId)
     profile = user.profile_pic
+    print(profile)
 
     if profile:
         profile_image_url = profile.photo
     else:
         profile_image_url = None
     
+    print(profile_image_url)
     return profile_image_url
 
 def signup(request):
@@ -46,14 +48,11 @@ def process_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-
-        user1 = GeneralUser.objects.get(email=email)
-        profile = user_profile(user1.id)
-
         user = authenticate(request, username = email, password=password)
         
         if user is not None:
             request.session['id'] = user.id
+            profile = user_profile(user.id)
             return render(request, 'index.html', {'user': user, 'profile': profile})
         
         else:
@@ -62,12 +61,16 @@ def process_login(request):
 def user_profile_upload(request):
     if request.method == 'POST' and request.FILES['photo']:
         form = UserProfileForm(request.POST, request.FILES)
+        id = request.session['id']                              #retrieve id from session
+        user = GeneralUser.objects.get(id=id)
         if form.is_valid():
             user_profile = form.save(commit=False)
-            id = request.session['id']                              #retrieve id from session
             user_profile.userId = GeneralUser.objects.get(id=id)    #retrive user from id
             
             user_profile.save()
+
+            user.profile_pic = user_profile
+            user.save()
 
             return render(request, 'login.html')
     else:
