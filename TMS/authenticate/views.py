@@ -1,26 +1,49 @@
-from django.shortcuts import render
-from .models import GeneralUser, UserProfileImage
+from django.shortcuts import render, redirect
+from .models import GeneralUser
 from .forms import UserProfileForm
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth import login, authenticate, logout
+from allauth.socialaccount.models import SocialAccount
+
 
 # Create your views here.
+def user_profile(userId):
+    user = GeneralUser.objects.get(id = userId)
+    profile = user.profile_pic
+    print(profile)
+
+    if profile:
+        profile_image_url = profile.photo
+    else:
+        profile_image_url = None
+    
+    print(profile_image_url)
+    return profile_image_url
+
 def signup(request):
     return render(request, 'signup.html')
 
-def login(request):
+def login_view(request):
     return render(request, 'login.html')
 
 def upload_profile(request):
     return render(request, 'upload_profile.html')
 
+def home(request):
+    if request.user.is_authenticated:
+            social_account = SocialAccount.objects.get(user=request.user, provider='google')
+            profile_image_url = social_account.extra_data.get('picture')
+            context = {'user': request.user.username, 'profile' : profile_image_url}
+            return render(request, 'index.html', context)
+
 def process_signup(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        password = request.POST.get('password')
+        name = request.POST['name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        password = request.POST['password']
 
-        generalUser = GeneralUser(name=name, email=email, phone=phone, password=make_password(password))
+        generalUser = GeneralUser(username=name, email=email, phone=phone)
+        generalUser.set_password(password)
         generalUser.save()
 
         user = GeneralUser.objects.get(email=email)
@@ -34,12 +57,11 @@ def process_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-
-        user = GeneralUser.objects.get(email=email)
-        profile = UserProfileImage.objects.get(userId=user.id)
+        user = authenticate(request, username = email, password=password)
         
-        if check_password(password, user.password):
+        if user is not None:
             request.session['id'] = user.id
+            profile = user_profile(user.id)
             return render(request, 'index.html', {'user': user, 'profile': profile})
         
         else:
@@ -48,18 +70,24 @@ def process_login(request):
 def user_profile_upload(request):
     if request.method == 'POST' and request.FILES['photo']:
         form = UserProfileForm(request.POST, request.FILES)
+        id = request.session['id']                              #retrieve id from session
+        user = GeneralUser.objects.get(id=id)
         if form.is_valid():
             user_profile = form.save(commit=False)
-            id = request.session['id']                              #retrieve id from session
             user_profile.userId = GeneralUser.objects.get(id=id)    #retrive user from id
             
             user_profile.save()
 
-            return render(request, 'index.html')
+            user.profile_pic = user_profile
+            user.save()
+
+            return render(request, 'login.html')
     else:
         return render(request, 'user_profile.html')
 
 
-
+def logout_view(request):
+    logout(request)
+    return redirect("login")
 
     

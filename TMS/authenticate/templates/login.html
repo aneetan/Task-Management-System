@@ -14,6 +14,7 @@
     <title>Login </title>
   </head>
   <body>
+    {% load socialaccount %}
     <div class="uf-form-signin">
       <div class="text-center">
       <h1 class="text-white h3">Account Login</h1>
@@ -47,7 +48,7 @@
             <div class="dropdown-divider m-auto w-25"></div>
         </div>
         <div class="uf-social-login d-flex justify-content-center">
-          <a href="#" class="uf-social-ic" title="Login with Google"><i class="fab fa-google"></i></a>
+          <a href="{% provider_login_url 'google' %}" class="uf-social-ic" title="Login with Google"><i class="fab fa-google"></i></a>
         </div>
         <div class="mt-4 text-center">
           <span class="text-white">Don't have an account?</span>
