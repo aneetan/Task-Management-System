@@ -1,12 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, User
 
 # Create your models here.
 class GeneralUser(AbstractUser):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=10, unique=True)
+    phone = models.CharField(max_length=10)
     profile_pic = models.OneToOneField(
         'UserProfileImage',
         on_delete=models.SET_NULL,
@@ -14,7 +14,7 @@ class GeneralUser(AbstractUser):
     )
 
     USERNAME_FIELD ='email'
-    REQUIRED_FIELDS = ['username', 'phone']
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.email

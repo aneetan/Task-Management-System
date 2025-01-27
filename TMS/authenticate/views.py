@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import GeneralUser
 from .forms import UserProfileForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from allauth.socialaccount.models import SocialAccount
+
 
 # Create your views here.
 def user_profile(userId):
@@ -20,11 +22,18 @@ def user_profile(userId):
 def signup(request):
     return render(request, 'signup.html')
 
-def login(request):
+def login_view(request):
     return render(request, 'login.html')
 
 def upload_profile(request):
     return render(request, 'upload_profile.html')
+
+def home(request):
+    if request.user.is_authenticated:
+            social_account = SocialAccount.objects.get(user=request.user, provider='google')
+            profile_image_url = social_account.extra_data.get('picture')
+            context = {'user': request.user.username, 'profile' : profile_image_url}
+            return render(request, 'index.html', context)
 
 def process_signup(request):
     if request.method == 'POST':
@@ -77,6 +86,8 @@ def user_profile_upload(request):
         return render(request, 'user_profile.html')
 
 
-
+def logout_view(request):
+    logout(request)
+    return redirect("login")
 
     
