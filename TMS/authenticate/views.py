@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from allauth.socialaccount.models import SocialAccount
 
 
-# Create your views here.
+# Method to render the profile picture
 def user_profile(userId):
     user = GeneralUser.objects.get(id = userId)
     profile = user.profile_pic
@@ -16,7 +16,6 @@ def user_profile(userId):
     else:
         profile_image_url = None
     
-    print(profile_image_url)
     return profile_image_url
 
 def signup(request):
@@ -28,6 +27,7 @@ def login_view(request):
 def upload_profile(request):
     return render(request, 'upload_profile.html')
 
+#login/signup using google account
 def home(request):
     if request.user.is_authenticated:
             social_account = SocialAccount.objects.get(user=request.user, provider='google')
@@ -35,6 +35,7 @@ def home(request):
             context = {'user': request.user.username, 'profile' : profile_image_url}
             return render(request, 'index.html', context)
 
+# signup using GeneralUser model
 def process_signup(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -52,7 +53,8 @@ def process_signup(request):
         return render(request, 'upload_profile.html')
     else:
         return render(request, 'signup.html')
-    
+
+# login using generalUser model
 def process_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -67,6 +69,7 @@ def process_login(request):
         else:
             return render(request, 'login.html', {'error': 'Invalid email or password'})
 
+# upload user profile 
 def user_profile_upload(request):
     if request.method == 'POST' and request.FILES['photo']:
         form = UserProfileForm(request.POST, request.FILES)
@@ -86,6 +89,7 @@ def user_profile_upload(request):
         return render(request, 'user_profile.html')
 
 
+#logout function
 def logout_view(request):
     logout(request)
     return redirect("login")
