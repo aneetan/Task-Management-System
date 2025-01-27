@@ -12,7 +12,7 @@ def user_profile(userId):
     print(profile)
 
     if profile:
-        profile_image_url = profile.photo
+        profile_image_url = 'http://127.0.0.1:8000/media/' + profile.photo.name
     else:
         profile_image_url = None
     
