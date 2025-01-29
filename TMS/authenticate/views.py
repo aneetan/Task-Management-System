@@ -10,6 +10,9 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ProjectSerializer, ProjectUserRoleSerializer
 
+from rest_framework.authtoken.models import Token
+from django.views.decorators.csrf import csrf_exempt
+
 # Method to render the profile picture
 def user_profile(userId):
     user = GeneralUser.objects.get(id = userId)
@@ -60,27 +63,8 @@ def process_signup(request):
         return render(request, 'signup.html')
 
 # login using generalUser model
-# def process_login(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-#         user = authenticate(request, username = email, password=password)
-        
-#         if user is not None:
-#             request.session['id'] = user.id
-#             profile = user_profile(user.id)
-#             return render(request, 'index.html', {'user': user, 'profile': profile})
-        
-#         else:
-#             return render(request, 'login.html', {'error': 'Invalid email or password'})
 
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-
-@csrf_exempt  # Disable CSRF for API usage (Optional: Use Django REST Framework instead)
+@csrf_exempt 
 def process_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -92,10 +76,12 @@ def process_login(request):
             # Get or create a token for the authenticated user
             token, _ = Token.objects.get_or_create(user=user)
             
-            return JsonResponse({'token': token.key, 'user_id': user.id}, status=200)
+            profile = user_profile(user.id)
+            return render(request, 'index.html', {'user': user, 'profile': profile})
         
         else:
-            return JsonResponse({'error': 'Invalid email or password'}, status=400)
+            return render(request, 'login.html', {'error': 'Invalid email or password'})
+
 
 # upload user profile 
 def user_profile_upload(request):
@@ -122,6 +108,7 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
+#api to create a project
 class ProjectCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -130,7 +117,6 @@ class ProjectCreateView(APIView):
         serializer = ProjectSerializer(data=data)
 
         if serializer.is_valid():
-            # project = serializer.save(created_by = request.user)
 
             project = serializer.save()
             project.created_by.add(request.user) 
@@ -138,7 +124,11 @@ class ProjectCreateView(APIView):
             ProjectUserRole.objects.create(role='admin', user = request.user, project = project)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+
+
+#api to invite user 
 class ProjectUserInviteView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -148,9 +138,6 @@ class ProjectUserInviteView(APIView):
         if serializer.is_valid():
             project_id = serializer.validated_data['project'].projectId 
 
-            print(f"Project ID: {project_id}")
-            print(f"Request User: {request.user.id}")
-            
             is_admin = ProjectUserRole.objects.filter(
                 project_id = project_id, user=request.user, role="admin"
             ).exists()
