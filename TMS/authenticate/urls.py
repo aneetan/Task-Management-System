@@ -12,7 +12,10 @@ urlpatterns = [
     path('process_login/', views.process_login, name='process_login'),
     path('user_profile_upload/', views.user_profile_upload, name='user_profile_upload'),
     path('logout/', views.logout_view, name='logout'),
-    path('home/', views.home, name='home')
+    path('home/', views.home, name='home'),
+
+    path('projects/create/', views.ProjectCreateView.as_view(), name="project_create"),
+    path('projects/invite/', views.ProjectUserInviteView.as_view(), name="project_invite")
 
 ]
 

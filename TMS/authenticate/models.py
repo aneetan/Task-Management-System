@@ -37,7 +37,7 @@ class Project(models.Model):
     description = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField()
-    created_by = models.ManyToManyField(GeneralUser, on_delete=models.CASCADE, related_name= 'project_creator')
+    created_by = models.ManyToManyField(GeneralUser, related_name= 'project_creator')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

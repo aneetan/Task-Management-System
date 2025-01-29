@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect
-from .models import GeneralUser
+from .models import GeneralUser, Project, ProjectUserRole
 from .forms import UserProfileForm
 from django.contrib.auth import login, authenticate, logout
 from allauth.socialaccount.models import SocialAccount
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from .serializers import ProjectSerializer, ProjectUserRoleSerializer
 
 # Method to render the profile picture
 def user_profile(userId):
@@ -55,19 +60,42 @@ def process_signup(request):
         return render(request, 'signup.html')
 
 # login using generalUser model
+# def process_login(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#         user = authenticate(request, username = email, password=password)
+        
+#         if user is not None:
+#             request.session['id'] = user.id
+#             profile = user_profile(user.id)
+#             return render(request, 'index.html', {'user': user, 'profile': profile})
+        
+#         else:
+#             return render(request, 'login.html', {'error': 'Invalid email or password'})
+
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt  # Disable CSRF for API usage (Optional: Use Django REST Framework instead)
 def process_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = authenticate(request, username = email, password=password)
-        
+
+        user = authenticate(username=email, password=password)
+
         if user is not None:
-            request.session['id'] = user.id
-            profile = user_profile(user.id)
-            return render(request, 'index.html', {'user': user, 'profile': profile})
+            # Get or create a token for the authenticated user
+            token, _ = Token.objects.get_or_create(user=user)
+            
+            return JsonResponse({'token': token.key, 'user_id': user.id}, status=200)
         
         else:
-            return render(request, 'login.html', {'error': 'Invalid email or password'})
+            return JsonResponse({'error': 'Invalid email or password'}, status=400)
 
 # upload user profile 
 def user_profile_upload(request):
@@ -94,4 +122,43 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
+class ProjectCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data 
+        serializer = ProjectSerializer(data=data)
+
+        if serializer.is_valid():
+            # project = serializer.save(created_by = request.user)
+
+            project = serializer.save()
+            project.created_by.add(request.user) 
+
+            ProjectUserRole.objects.create(role='admin', user = request.user, project = project)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ProjectUserInviteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data 
+        serializer = ProjectUserRoleSerializer(data=data)
+        if serializer.is_valid():
+            project_id = serializer.validated_data['project'].projectId 
+
+            print(f"Project ID: {project_id}")
+            print(f"Request User: {request.user.id}")
+            
+            is_admin = ProjectUserRole.objects.filter(
+                project_id = project_id, user=request.user, role="admin"
+            ).exists()
+
+            if not is_admin:
+                return Response({'error': 'You cannot invite users'}, status=status.HTTP_403_FORBIDDEN)
+            
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
