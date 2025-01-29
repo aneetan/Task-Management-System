@@ -103,8 +103,6 @@
                   <!-- use a default image if no profile is found -->
                   <img src="{{ profile }}" alt="Profile Picture">
 
-
-
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
@@ -115,7 +113,7 @@
                 <a class="dropdown-item" href="#">
                   <i class="mdi mdi-cached me-2 text-success"></i> See profile </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{% url 'logout' %}">
                   <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
               </div>
             </li>
@@ -184,6 +182,7 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Add job details</h4>
+
                     <form class="forms-sample">
                       <div class="form-group">
                         <label for="exampleInputName1">Project Name </label>
@@ -209,6 +208,7 @@
 
                       <button type="submit" class="btn jobsubmit-btn btn-primary me-2"> Add Project </button>
                     </form>
+                    
                   </div>
                 </div>
               </div>
